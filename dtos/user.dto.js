@@ -36,5 +36,6 @@ export const userSchema = z.object({
       invalid_type_error: "La password debe ser un texto",
     })
     .min(6),
-  role: z.enum(["admin", "user"]),
+  role: z.enum(["admin", "inspector", "supervisor"]),
+  tenant_id: z.string({ required_error: "El tenant es obligatorio" }),
 });
