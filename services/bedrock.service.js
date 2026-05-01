@@ -7,7 +7,7 @@ export const MODELS = {
   sonnet: "anthropic.claude-3-5-sonnet-20241022-v2:0",
 };
 
-const USE_MOCK = process.env.NODE_ENV !== "production";
+const USE_MOCK = process.env.USE_BEDROCK !== "true";
 
 const client = new BedrockRuntimeClient({
   region: process.env.AWS_REGION,
