@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
 
   mongodb:
@@ -7,12 +5,13 @@ services:
     restart: unless-stopped
     volumes:
       - mongo_data:/data/db
+      - /opt/galaxy/mongo-keyfile:/etc/mongodb/keyfile:ro
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
-    command: mongod --replSet rs0 --bind_ip_all
+    command: mongod --replSet rs0 --bind_ip_all --keyFile /etc/mongodb/keyfile
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "mongosh", "-u", "${MONGO_USER}", "-p", "${MONGO_PASS}", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,10 +40,10 @@ services:
         condition: service_healthy
     env_file: .env.prod
     environment:
-      NODE_ENV:   production
-      PORT:       1331
-      MONGO_URI:  mongodb://${MONGO_USER}:${MONGO_PASS}@mongodb:27017/galaxy?authSource=admin&replicaSet=rs0
-      REDIS_URL:  redis://redis:6379
+      NODE_ENV:  production
+      PORT:      1331
+      MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASS}@mongodb:27017/galaxy?authSource=admin&replicaSet=rs0
+      REDIS_URL: redis://redis:6379
 
   frontend:
     image: 040480027454.dkr.ecr.us-east-1.amazonaws.com/galaxy-front:latest

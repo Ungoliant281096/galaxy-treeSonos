@@ -56,6 +56,15 @@ jobs:
           docker tag      $ECR_REGISTRY/galaxy-front:${{ github.sha }} $ECR_REGISTRY/galaxy-front:latest
           docker push     $ECR_REGISTRY/galaxy-front:latest
 
+      - name: Copy compose file to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host:     ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key:      ${{ secrets.PROD_SSH_KEY }}
+          source:   docker-compose.prod.yml
+          target:   /opt/galaxy/
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:

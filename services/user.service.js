@@ -1,5 +1,5 @@
 // Service que se encarga de la logica de CRUD y Login de usuarios;
-import { GalaxyUser } from "../models/user.model.js";
+import { GalaxyUser } from "../models/User.model.js";
 import { userSchema } from "../dtos/user.dto.js";
 import { z } from "zod";
 import bcrypt from "bcrypt";
