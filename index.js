@@ -1,25 +1,52 @@
+import { createServer } from "http";
 import express from "express";
+import { Server as SocketIO } from "socket.io";
 import helmet from "helmet";
 import cors from "cors";
 import connectDB from './config/db.js';
 import morgan from "morgan";
-import bodyParser from "body-parser";
+import jwt from "jsonwebtoken";
 
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { iniciarChangeStream } from "./services/changestream.service.js";
 
 // Endpoints
-import galaxyRoutes from "./routes/galaxy.routes.js";
-import userRoutes from "./routes/users.routes.js";
+import galaxyRoutes    from "./routes/galaxy.routes.js";
+import userRoutes      from "./routes/users.routes.js";
+import chatRoutes      from "./routes/chat.routes.js";
+import dictamenRoutes  from "./routes/dictamen.routes.js";
+import syncRoutes      from "./routes/sync.routes.js";
+import reporteRoutes   from "./routes/reporte.routes.js";
 
-// Configuraciones
-const app = express();
-const PORT = process.env.PORT || 1331;
+const app    = express();
+const server = createServer(app);
+const PORT   = process.env.PORT || 1331;
 
-const jsonParser = bodyParser.json();
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
+// Socket.io — autenticación con JWT, rooms por tenant
+const io = new SocketIO(server, {
+  cors: { origin: "*" },
+});
 
-// Conectar a la base de datos
-connectDB();
+io.use((socket, next) => {
+  const token = socket.handshake.auth?.token;
+  if (!token) return next(new Error("AUTH_REQUIRED"));
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET || process.env.SECRETORPRIVATEKEY);
+    socket.usuario = payload;
+    next();
+  } catch {
+    next(new Error("AUTH_INVALID"));
+  }
+});
+
+io.on("connection", (socket) => {
+  const { tenant_id } = socket.usuario;
+  socket.join(`tenant:${tenant_id}`);
+  socket.on("disconnect", () => {});
+});
+
+// DB + Change Stream
+connectDB().then(() => iniciarChangeStream(io));
 
 // Middlewares
 app.use(helmet());
@@ -29,11 +56,14 @@ app.use(express.json());
 
 // Rutas
 app.use("/api/galaxy", galaxyRoutes);
+app.use("/api/galaxy", chatRoutes);
+app.use("/api/galaxy/dictamenes", dictamenRoutes);
+app.use("/api/galaxy", syncRoutes);
+app.use("/api/galaxy/reportes", reporteRoutes);
 app.use("/api/users", userRoutes);
 
 app.use(errorHandler);
 
-// Iniciar el servidor
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Servidor Galaxy-Back corriendo en http://localhost:${PORT}`);
 });

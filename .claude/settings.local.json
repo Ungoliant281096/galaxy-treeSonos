@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(node --input-type=module)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(npm test *)"
     ]
   }
 }

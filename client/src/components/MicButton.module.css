@@ -1,0 +1,50 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+  position: relative;
+}
+
+.btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: background .15s, transform .1s;
+}
+
+.btn:active { transform: scale(.93); }
+.btn:disabled { background: var(--border); cursor: not-allowed; }
+.btn.active { background: var(--error); }
+
+.pulse {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--error);
+  opacity: .3;
+  animation: pulse 1.2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%   { transform: translateX(-50%) scale(1); opacity: .3; }
+  100% { transform: translateX(-50%) scale(2); opacity: 0; }
+}
+
+.error {
+  font-size: .8rem;
+  color: var(--error);
+  text-align: center;
+  max-width: 180px;
+}

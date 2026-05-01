@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+    # Replica set requerido para Change Streams y transacciones
+    command: mongod --replSet rs0 --bind_ip_all
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo-init:
+    image: mongo:7
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: "no"
+    command: >
+      mongosh --host mongodb -u ${MONGO_USER} -p ${MONGO_PASS} --authenticationDatabase admin
+      --eval "try { rs.status() } catch(e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'mongodb:27017' }] }) }"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      NODE_ENV:             production
+      PORT:                 1331
+      MONGO_URI:            mongodb://${MONGO_USER}:${MONGO_PASS}@mongodb:27017/galaxy?authSource=admin&replicaSet=rs0
+      JWT_SECRET:           ${JWT_SECRET}
+      SECRETORPRIVATEKEY:   ${JWT_SECRET}
+      AWS_REGION:           ${AWS_REGION}
+      AWS_ACCESS_KEY_ID:    ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_BUCKET:        ${AWS_S3_BUCKET}
+      REDIS_URL:            redis://redis:6379
+
+  frontend:
+    build: ./client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+  redis_data:

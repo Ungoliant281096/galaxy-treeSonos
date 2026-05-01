@@ -1,0 +1,97 @@
+.page { display: flex; flex-direction: column; min-height: 100dvh; background: var(--surface-2); }
+.hint { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+}
+
+.back  { font-size: 1.2rem; color: var(--primary); padding: .25rem .5rem; border-radius: 8px; }
+.titulo { font-size: 1.1rem; font-weight: 600; }
+
+.body {
+  padding: .8rem;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .6rem;
+}
+
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .9rem .6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+}
+
+.kpiVal   { font-size: 1.5rem; font-weight: 700; }
+.kpiLabel { font-size: .72rem; color: var(--text-muted); text-align: center; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .75rem;
+}
+
+.cardTit {
+  font-size: .8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: .06em;
+}
+
+.select {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .25rem .5rem;
+  font-size: .82rem;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .85rem;
+  margin-top: .75rem;
+}
+
+.table th {
+  text-align: left;
+  padding: .4rem .5rem;
+  color: var(--text-muted);
+  font-size: .75rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.table td {
+  padding: .4rem .5rem;
+  border-bottom: 1px solid var(--surface-2);
+}
+
+.num { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
