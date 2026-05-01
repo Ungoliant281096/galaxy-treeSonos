@@ -1,0 +1,44 @@
+{
+  "name": "galaxy-back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "lint": "eslint . --ext .js --fix",
+    "format": "prettier --write . --ignore-path .gitignore"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1040.0",
+    "@aws-sdk/client-s3": "^3.1034.0",
+    "@aws-sdk/client-transcribe": "^3.1034.0",
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.2",
+    "class-transformer": "^0.5.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.5.0",
+    "morgan": "^1.10.1",
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14",
+    "pdf-lib": "^1.17.1",
+    "reflect-metadata": "^0.2.2",
+    "uuid": "^14.0.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.3"
+  }
+}
