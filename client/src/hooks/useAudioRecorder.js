@@ -10,6 +10,10 @@ export function useAudioRecorder() {
   const start = useCallback(async () => {
     setError(null);
     setBlob(null);
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError('El micrófono requiere HTTPS. Usa el campo de texto para responder.');
+      return;
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       // Preferir audio/webm; voz corta (~30s) → webm es lo más compatible
