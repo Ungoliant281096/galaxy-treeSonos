@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import {
+  crearDictamen,
   listarDictamenes,
   obtenerDictamen,
   cambiarEstado,
@@ -9,6 +10,7 @@ import {
 
 const router = Router();
 
+router.post("/",         authMiddleware, crearDictamen);
 router.get("/",          authMiddleware, listarDictamenes);
 router.get("/:id",       authMiddleware, obtenerDictamen);
 router.patch("/:id/estado", authMiddleware, cambiarEstado);

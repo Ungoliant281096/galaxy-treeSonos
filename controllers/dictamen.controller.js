@@ -2,6 +2,21 @@ import { Dictamen } from "../models/Dictamen.model.js";
 import { createDictamen, getDictamen } from "../services/dictamen.service.js";
 import { filtrosDictamenDto, cambiarEstadoDto } from "../dtos/dictamen.dto.js";
 
+export const crearDictamen = async (req, res) => {
+  try {
+    const { uid, tenant_id } = req.usuario;
+    const dictamen = await Dictamen.create({
+      inspector_id: uid,
+      tenant_id,
+      estado: 'borrador',
+      norma_aplicada: { clave: 'NADF-001-RNAT-2015', version_formulario: 'v2.1' },
+    });
+    return res.status(201).json(dictamen);
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
+  }
+};
+
 export const listarDictamenes = async (req, res) => {
   const parsed = filtrosDictamenDto.safeParse(req.query);
   if (!parsed.success) {

@@ -20,7 +20,7 @@ export default function HomePage() {
 
   const crearNuevo = async () => {
     try {
-      const { data } = await api.post('/galaxy/dictamen');
+      const { data } = await api.post('/galaxy/dictamenes');
       navigate(`/chat/${data._id}`);
     } catch {
       // Sin conexión: generar ID local y ir offline
