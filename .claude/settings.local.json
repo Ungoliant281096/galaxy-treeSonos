@@ -4,7 +4,19 @@
       "Bash(node --input-type=module)",
       "Bash(npm install *)",
       "Bash(npm run *)",
-      "Bash(npm test *)"
+      "Bash(npm test *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'fix: add tenant_id and correct role enum in user DTO *)",
+      "Bash(git push *)",
+      "Bash(git commit -m 'feat: USE_BEDROCK env flag to control real vs mock Bedrock calls *)",
+      "Bash(git commit -m 'fix: graceful error when getUserMedia unavailable \\(HTTP context\\) *)",
+      "Bash(npm --version)",
+      "Bash(brew --version)",
+      "Bash(brew services *)",
+      "Bash(curl -s -X POST http://localhost:1331/api/users/login -H 'Content-Type: application/json' -d '{\"email\":\"ungoliant.28@gmail.com\",\"password\":\"Mci31deq+\"}')",
+      "Read(//Users/fcruza/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/28d7de74-4b86-4a54-b2aa-5bdffac65b83/121dc828-86f0-4b40-99b8-718a67010a45/skills/docx/**)",
+      "Bash(python3 scripts/office/soffice.py --headless --convert-to docx \"/Users/fcruza/Downloads/FORMATO DE DICTAMEN TECNICO 2025 jefe.doc\")",
+      "Bash(pandoc \"/Users/fcruza/Downloads/FORMATO DE DICTAMEN TECNICO 2025 jefe.doc\" -t markdown)"
     ]
   }
 }

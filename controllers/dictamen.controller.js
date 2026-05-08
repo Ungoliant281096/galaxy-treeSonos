@@ -1,6 +1,7 @@
 import { Dictamen } from "../models/Dictamen.model.js";
 import { createDictamen, getDictamen } from "../services/dictamen.service.js";
 import { filtrosDictamenDto, cambiarEstadoDto } from "../dtos/dictamen.dto.js";
+import { generarDictamenPdf } from "../services/pdf.service.js";
 
 export const crearDictamen = async (req, res) => {
   try {
@@ -102,4 +103,24 @@ export const eliminarDictamen = async (req, res) => {
   if (!dictamen) return res.status(404).json({ msg: "Dictamen no encontrado" });
 
   return res.json({ msg: "Dictamen eliminado" });
+};
+
+export const exportarPDF = async (req, res) => {
+  try {
+    const pdfBytes = await generarDictamenPdf({
+      id: req.params.id,
+      tenant_id: req.usuario.tenant_id,
+    });
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="dictamen-${req.params.id}.pdf"`
+    );
+    return res.end(Buffer.from(pdfBytes));
+  } catch (error) {
+    if (error.message === "DICTAMEN_NOT_FOUND") {
+      return res.status(404).json({ msg: "Dictamen no encontrado" });
+    }
+    return res.status(500).json({ msg: error.message });
+  }
 };
